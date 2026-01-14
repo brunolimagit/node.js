@@ -1,9 +1,21 @@
 import express from "express";
 
 const server = express();
+const cursos = ['Node.js', 'Javascript', 'React.js']
+
+
+//aqui estou usando o params do index do array cursos 
+server.get('/curso/:index', (req, res) =>{
+    const {index} = req.params
+
+return res.json({
+    curso: cursos[index]
+})
+}) 
 
 //localhost:3000/curso
 //aqui estou recebendo "req" = nome | enviando "res"= <h1>curso de ${nome}</h1>
+//isso e uma query params = ?nome=nodeJS 
 server.get('/curso', (req, res) => {
     const nome = req.query.nome
 
@@ -24,6 +36,24 @@ server.get('/api', (req, res) =>{
         nacionalidade:"brasileiro"
     })
 })
+
+/*localhost:3000/data/1
+essa e a Route Params = /data/1 onde o params vem do id, e nesse
+codigo estou usando como exemplo um obj onde ele me mostra o
+id*/
+server.get('/data/:id', (req, res) =>{
+   const data = req.params.id
+
+   return res.json({
+    curso:{
+    id:`curso ${data}`
+    },
+})
+})
+
+
+
+
 
 server.listen(3000);
 
