@@ -1,7 +1,15 @@
 import express from "express";
 
 const server = express();
-const cursos = ['Node.js', 'Javascript', 'React.js']
+server.use(express.json());
+
+const cursos = []
+
+// aqui estou retornando uma resposta JSON com todos os cursos
+server.get('/curso', (req, res) =>{ 
+
+    return res.json(cursos);
+})
 
 
 //aqui estou usando o params do index do array cursos 
@@ -12,10 +20,29 @@ return res.json({
     curso: cursos[index]
 })
 }) 
+//aqui estou recebendo um dado(nome) pelo body e armazenando no array cursos
+server.post('/curso', (req, res) => {
+  const { nome } = req.body;
+  
+  if (!nome) {
+    return res.status(400).json({
+      error: "O campo nome é obrigatório"
+    });
+  }
+ 
+   const novoCurso = {
+    id: cursos.length + 1,
+    nome
+  };
 
+  cursos.push(novoCurso);
+
+  return res.status(201).json(novoCurso);
+});
 //localhost:3000/curso
 //aqui estou recebendo "req" = nome | enviando "res"= <h1>curso de ${nome}</h1>
 //isso e uma query params = ?nome=nodeJS 
+/*
 server.get('/curso', (req, res) => {
     const nome = req.query.nome
 
@@ -33,14 +60,15 @@ server.get('/api', (req, res) =>{
     return res.json({
         nome: "bruno lima",
         idade: 31,
-        nacionalidade:"brasileiro"
-    })
+        nacionalidade:"brasileiro",
+})
 })
 
 /*localhost:3000/data/1
 essa e a Route Params = /data/1 onde o params vem do id, e nesse
 codigo estou usando como exemplo um obj onde ele me mostra o
-id*/
+id
+
 server.get('/data/:id', (req, res) =>{
    const data = req.params.id
 
@@ -49,11 +77,7 @@ server.get('/data/:id', (req, res) =>{
     id:`curso ${data}`
     },
 })
-})
-
-
-
-
+})*/
 
 server.listen(3000);
 
