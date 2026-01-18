@@ -8,7 +8,7 @@ const cursos = []
 // aqui estou retornando uma resposta JSON com todos os cursos
 server.get('/curso', (req, res) =>{ 
 
-    return res.json(cursos);
+    return res.status(200).json(cursos);
 })
 
 
@@ -38,6 +38,37 @@ server.post('/curso', (req, res) => {
   cursos.push(novoCurso);
 
   return res.status(201).json(novoCurso);
+});
+
+//editando 
+server.put('/curso/:index', (req, res) =>{
+  const {index} = req.params
+  const {nome} = req.body
+
+  cursos[index]= nome
+
+  return res.json(cursos);
+})
+
+//delete
+server.delete('/curso/:index', (req, res) => {
+  const { index } = req.params; // pega o índice vindo da URL
+
+  // valida se o índice existe no array
+  if (!cursos[index]) {
+    return res.status(404).json({
+      error: "Curso não encontrado"
+    });
+  }
+
+  // remove o curso do array e guarda o valor removido
+  const cursoRemovido = cursos.splice(index, 1);
+
+  // retorna a lista atualizada + mensagem
+  return res.json({
+    message: `Curso deletado com sucesso`,
+    cursos
+  });
 });
 //localhost:3000/curso
 //aqui estou recebendo "req" = nome | enviando "res"= <h1>curso de ${nome}</h1>
